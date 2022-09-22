@@ -19,12 +19,12 @@
     <h1>Registro de Estudiantes</h1>
 
     <div class="container">
-    <form class="d-flex" action="" method="post">
+    <form class="d-flex" action="crud_estudiante.php" method="post">
       <div class="col">
 
         <div class="mb-3">
-          <label for="lbl_id" class="form-label"><b>ID</b></label>
-          <input type="text" name="txt_id" id="txt_id" class="form-control" value="0" readonly>
+          <label for="lbl_idE" class="form-label"><b>ID</b></label>
+          <input type="text" name="txt_idE" id="txt_idE" class="form-control" value="0" readonly>
         </div>
 
         <div class="mb-3">
@@ -83,12 +83,8 @@
         <div class="btn-group">
         <div class="mb-3">
           <input type="submit" name="btn_agregar" id="btn_agregar" class="btn btn-primary" value="Agregar" >
-        </div>
-        <div class="mb-3">
-          <input type="submit" name="btn_actualizar" id="btn_actualizar" class="btn btn-primary" value="Actualizar" >
-        </div>
-        <div class="mb-3">
-          <input type="submit" name="btn_borrar" id="btn_borrar" class="btn btn-primary" value="Borrar estudiantes" >
+          <input type="submit" name="btn_modificar" id="btn_modificar" class="btn btn-success" value="Modificar" >
+          <input type="submit" name="btn_eliminar" id="btn_eliminar" class="btn btn-danger" value="Borrar estudiantes" >
         </div>
 </div>
 
@@ -108,14 +104,14 @@
 
         </tr>
         </thead>
-        <tbody >
+        <tbody id="tbl_estudiantes">
             <?php
                  include("Conexion.php");
                  $db_conexion = mysqli_connect($db_host,$db_usr,$db_pass,$db_nombre);
                  $db_conexion ->real_query("select idestudiantes,carnet,nombres,apellidos,direccion,telefono,genero,correo,fecha_nacimiento from estudiantes_1.estudiantes;");
                  $resultado =  $db_conexion-> use_result();
                  while($fila = $resultado->fetch_assoc()){
-                 echo"<tr data-id=". $fila['idestudiantes'].">";
+                 echo"<tr data-idestudiantes=". $fila['idestudiantes']."data-idE".$fila['genero'].">";
                  echo"<td>". $fila['carnet']."</td>";
                  echo"<td>". $fila['nombres']."</td>";
                  echo"<td>". $fila['apellidos']. "</td>";
@@ -132,41 +128,36 @@
 
      </table>
   </div>
-<?php
-    if(isset($_POST["btn_agregar"])){
-      include("Conexion.php");
-                 $db_conexion = mysqli_connect($db_host,$db_usr,$db_pass,$db_nombre);
-                 $txt_carnet = utf8_decode ($_POST["txt_carnet"]);
-                 $txt_nombres = utf8_decode ($_POST["txt_nombres"]);
-                 $txt_apellidos = utf8_decode ($_POST["txt_apellidos"]);
-                 $txt_direccion = utf8_decode ($_POST["txt_direccion"]);
-                 $txt_telefono = utf8_decode ($_POST["txt_telefono"]);
-                 $drop_genero = utf8_decode ($_POST["drop_genero"]);
-                 $txt_correo = utf8_decode ($_POST["txt_correo"]);
-                 $txt_fn = utf8_decode ($_POST["txt_fn"]);
-                 $sql = "INSERT INTO estudiantes(carnet,nombres,apellidos,direccion,telefono,genero,correo,fecha_nacimiento)VALUES('".$txt_carnet."','".$txt_nombres."','".$txt_apellidos."','".$txt_direccion."','".$txt_telefono."',".$drop_genero.",'".$txt_correo."', '".$txt_fn."');";
-                 if($db_conexion->query($sql)===true){
-                    $db_conexion ->close();
-                  echo"Exito";
-                 header("Refresh:0");
-                 }else{
-                  echo"Error" .$sql ."<br>".$db_conexion-> close(); 
-                 }
-                }
-  ?>
-
-
-
-
-
-
-
-
-
   <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous">
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous">
   </script>
+<script>
+    $("#tbl_estudiantes").on('click','tr td',function (e) {
+      var target, id_estudiantes, idE, carnet, nombres, apellidos, direccion,correo,telefono, nacimiento;
+      target = $(event.target);
+      id_estudiantes = target.parent().data('id_estudiantes');  
+      idE = target.parent().data('idE'); 
+      carnet =target.parent('tr').find("td").eq(0).html();
+      nombres =target.parent('tr').find("td").eq(1).html();
+      apellidos =target.parent('tr').find("td").eq(2).html();
+      direccion =target.parent('tr').find("td").eq(3).html();
+      correo =target.parent('tr').find("td").eq(4).html();
+      telefono =target.parent('tr').find("td").eq(5).html();
+      nacimiento =target.parent('tr').find("td").eq(7).html();
+      $("#txt_idestudiantes").val(idestudiantes);
+      $("#txt_codigo").val(codigo);
+      $("#txt_nombres").val(nombres);
+      $("#txt_apellidos").val(apellidos);
+      $("#txt_direccion").val(direccion);
+      $("#txt_correo").val(correo);
+      $("#txt_telefono").val(telefono);
+      $("#txt_fn").val(nacimiento);
+      $("#drop_genero").val(idp);
+    });
+  </script>
+
+
 </body>
 </html>
