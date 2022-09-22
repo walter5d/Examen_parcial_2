@@ -55,7 +55,7 @@
 
         <div class="mb-3">
           <label for="lbl_genero" class="form-label"><b>Genero</b></label>
-          <select class="form-select" name="drop_puesto" id="drop_puesto">
+          <select class="form-select" name="drop_genero" id="drop_genero">
             <option value=0>---Genero M-F --- </option>
 
              <?php
@@ -72,7 +72,7 @@
         </div>
         <div class="mb-3">
           <label for="" class="lbl_correo"><b>Correo</b></label>
-          <input type="date" name="txt_correo" id="txt_correo" class="form-control" placeholder="walterumg.0umw@gmail.com" required>
+          <input type="text" name="txt_correo" id="txt_correo" class="form-control" placeholder="walterumg.0umw@gmail.com" required>
         </div>
 
         <div class="mb-3">
@@ -128,13 +128,45 @@
                  }
                  $db_conexion -> close();
             ?>
-
-            
-    
     </tbody>
 
      </table>
   </div>
+<?php
+    if(isset($_POST["btn_agregar"])){
+      include("Conexion.php");
+                 $db_conexion = mysqli_connect($db_host,$db_usr,$db_pass,$db_nombre);
+                 $txt_carnet = utf8_decode ($_POST["txt_carnet"]);
+                 $txt_nombres = utf8_decode ($_POST["txt_nombres"]);
+                 $txt_apellidos = utf8_decode ($_POST["txt_apellidos"]);
+                 $txt_direccion = utf8_decode ($_POST["txt_direccion"]);
+                 $txt_telefono = utf8_decode ($_POST["txt_telefono"]);
+                 $drop_genero = utf8_decode ($_POST["drop_genero"]);
+                 $txt_correo = utf8_decode ($_POST["txt_correo"]);
+                 $txt_fn = utf8_decode ($_POST["txt_fn"]);
+                 $sql = "INSERT INTO estudiantes(carnet,nombres,apellidos,direccion,telefono,genero,correo,fecha_nacimiento)VALUES('".$txt_carnet."','".$txt_nombres."','".$txt_apellidos."','".$txt_direccion."','".$txt_telefono."',".$drop_genero.",'".$txt_correo."', '".$txt_fn."');";
+                 if($db_conexion->query($sql)===true){
+                    $db_conexion ->close();
+                  echo"Exito";
+                 header("Refresh:0");
+                 }else{
+                  echo"Error" .$sql ."<br>".$db_conexion-> close(); 
+                 }
+                }
+  ?>
 
+
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous">
+  </script>
 </body>
 </html>
